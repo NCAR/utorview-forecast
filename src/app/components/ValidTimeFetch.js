@@ -1,3 +1,4 @@
+'use client'
 import { useQuery } from '@tanstack/react-query'
 
 let datesURL = "https://wofsdltornado.blob.core.windows.net/wofs-dl-preds/available_dates.csv"
@@ -7,6 +8,7 @@ let forecastInterval = 5;
 let forecastMinutesArray = Array.from({ length: (forecastLength / forecastInterval) + 1 }, (_, index) => index * forecastInterval).reverse();
 
 export default function ValidTimeFetch({ onDatesFetch }) {
+    // Makes fetch request to available_dates.csv to get list of valid model run times.
     console.log("Render occurred! ValidTimeFetch")
     const { isPending, isError, data} = useQuery({
         queryKey: [datesURL],
@@ -22,6 +24,7 @@ export default function ValidTimeFetch({ onDatesFetch }) {
         refetchOnMount: false,
         refetchOnReconnect: false,
         staleTime: Infinity,
+        retry: false
     })
 
     if (isPending) {

@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import ValidTimeFetch from './components/ValidTimeFetch.js';
 import Controls from './components/Controls.js';
-import DataFetch from './components/DataFetch.js';
+import InitTimeFetch from './components/InitTimeFetch.js';
 
 const queryClient = new QueryClient();
 
@@ -11,6 +11,8 @@ export default function App() {
   console.log("Render occurred! App")
   const [initTimes, setInitTimes] = useState([]);
   const [validTimes, setValidTimes] = useState([]);
+
+  const [selectedInitTimes, setSelectedInitTimes] = useState([]);
   const [selectedValidTime, setSelectedValidTime] = useState([]);
 
   // update states once the dates are fetched in ValidTimeFetch
@@ -34,7 +36,7 @@ export default function App() {
           <Controls validTimes={ validTimes } selectedValidTime={ selectedValidTime } onValidTimeSelect={ handleSelectedValidTime } /> 
         }
         {validTimes.length > 0 && 
-          <DataFetch initTimes={ initTimes } selectedValidTime={ selectedValidTime }/> 
+          <InitTimeFetch initTimes={ initTimes } selectedValidTime={ selectedValidTime }/> 
         }
       </main>
     </QueryClientProvider>
