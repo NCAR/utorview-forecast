@@ -1,8 +1,7 @@
 'use client'
 export default function ModelControls({ filteredInitTimes, selectedInitTime, onInitTimeSelect }) {
-    console.log("Render occurred! Controls")
-    console.log(selectedInitTime)
-    console.log(typeof selectedInitTime)
+    console.log("Render occurred! ModelControls")
+
     return (
         <div>
             Init Times

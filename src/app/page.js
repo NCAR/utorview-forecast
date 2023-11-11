@@ -14,7 +14,6 @@ export default function App() {
   const [initTimes, setInitTimes] = useState([]);
   const [validTimes, setValidTimes] = useState([]);
 
-  const [filteredInitTimes, setFilteredInitTimes] = useState([]);
   const [selectedInitTime, setSelectedInitTime] = useState([]);
   const [selectedValidTime, setSelectedValidTime] = useState([]);
 
@@ -23,19 +22,13 @@ export default function App() {
     setInitTimes(initDates);
     setValidTimes(validDates);
     setSelectedValidTime(validDates[0]);
-
-    let filteredTimes = getCorrespondingInitTimes(initDates, validDates[0]);
-    setFilteredInitTimes(filteredTimes)
-    setSelectedInitTime(filteredTimes[0].toUTCString())
+    setSelectedInitTime(getCorrespondingInitTimes(initDates, validDates[0])[0].toUTCString());
   };
 
   // updates selected valid time and filtered init times on user input in Controls
   const handleSelectedValidTime = (validTime) => {
     setSelectedValidTime(validTime);
-
-    let filteredTimes = getCorrespondingInitTimes(initTimes, validTime);
-    setFilteredInitTimes(filteredTimes)
-    setSelectedInitTime(filteredTimes[0].toUTCString())
+    setSelectedInitTime(getCorrespondingInitTimes(initTimes, validTime)[0].toUTCString());
   }
 
   // updates selected init time on user input in Model Controls
@@ -57,7 +50,7 @@ export default function App() {
           <Controls validTimes={ validTimes } selectedValidTime={ selectedValidTime } onValidTimeSelect={ handleSelectedValidTime } /> 
         }
         {initTimes.length > 0 && 
-          <ModelControls filteredInitTimes={ filteredInitTimes } selectedInitTime={ selectedInitTime } onInitTimeSelect={ handleSelectedInitTime }/> 
+          <ModelControls filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedInitTime={ selectedInitTime } onInitTimeSelect={ handleSelectedInitTime }/> 
         }
       </main>
     </QueryClientProvider>
