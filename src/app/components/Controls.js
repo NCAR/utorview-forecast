@@ -4,6 +4,7 @@ export default function Controls({ validTimes, selectedValidTime, onValidTimeSel
 
     return (
         <div>
+            Valid Times
             <select
             value={selectedValidTime} 
             onChange={e => onValidTimeSelect(e.target.value)} 
