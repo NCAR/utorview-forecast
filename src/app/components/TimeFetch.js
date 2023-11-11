@@ -7,7 +7,7 @@ let forecastLength = 180;
 let forecastInterval = 5;
 let forecastMinutesArray = Array.from({ length: (forecastLength / forecastInterval) + 1 }, (_, index) => index * forecastInterval).reverse();
 
-export default function ValidTimeFetch({ onDatesFetch }) {
+export default function TimeFetch({ onDatesFetch }) {
     // Makes fetch request to available_dates.csv to get list of valid model run times.
     console.log("Render occurred! ValidTimeFetch")
     const { isPending, isError, data} = useQuery({
@@ -17,6 +17,7 @@ export default function ValidTimeFetch({ onDatesFetch }) {
             const data = await fetch(datesURL).then((res) => res.text());
             const initDatesList = formatInitTimes(data);
             const validDatesList = formatValidTimes(initDatesList);
+
             onDatesFetch(initDatesList, validDatesList);
             return data
         },
@@ -70,3 +71,4 @@ function formatValidTimes(initDatesList) {
 
     return Array.from(new Set(newDatesArray));
 }
+

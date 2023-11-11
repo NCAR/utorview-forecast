@@ -19,18 +19,7 @@ export default function InitTimeFetch({ initTimes, selectedValidTime }) {
     )
 }
 
-function getCorrespondingInitTimes(initTimes, selectedValidTime) {
-    // Returns: an array of Date objects corresponding to model run init times that include predictions for the selected valid time.
-    // Parameter initTimes: an array of Date objects corresponding to all model run init times.
-    // Parameter selectedValidTime: a UTC string representation of the currently selected valid time.
 
-    let selectedValidTimeUTC = new Date(selectedValidTime);
-
-    let earliestInitTime = new Date(selectedValidTimeUTC.getTime() - forecastLength * 60 * 1000);
-    let filteredInitTimes = initTimes.filter(date => date >= earliestInitTime && date <= selectedValidTimeUTC);
-
-    return filteredInitTimes;
-}
 
 function formatDateAsString(time) {
     // Returns: A string of numbers representing a date and time. e.g. June 29, 2023 at 23:30 returns '202306292330'.
