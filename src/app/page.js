@@ -19,7 +19,7 @@ export default function App() {
   const handleDatesFetch = (initDates, validDates) => {
     setInitTimes(initDates);
     setValidTimes(validDates);
-    setSelectedValidTime(validDates[36]);
+    setSelectedValidTime(validDates[0]);
   };
 
   // updates selected valid time on user input in Controls

@@ -9,9 +9,10 @@ export default function Controls({ validTimes, selectedValidTime, onValidTimeSel
             value={selectedValidTime} 
             onChange={e => onValidTimeSelect(e.target.value)} 
             >
-                <option value={validTimes[36]}>{validTimes[36]}</option>
-                <option value={validTimes[35]}>{validTimes[35]}</option>
-                <option value={validTimes[34]}>{validTimes[34]}</option>
+                <option value={validTimes[0]}>{validTimes[0]}</option>
+                <option value={validTimes[1]}>{validTimes[1]}</option>
+                <option value={validTimes[2]}>{validTimes[2]}</option>
+                <option value={validTimes[20]}>{validTimes[20]}</option>
             </select>
         </div>
     )
