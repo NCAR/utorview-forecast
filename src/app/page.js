@@ -4,6 +4,7 @@ import { useState } from 'react';
 import TimeFetch from './components/TimeFetch.js';
 import Controls from './components/Controls.js';
 import ModelControls from './components/ModelControls.js';
+import DataFetch from './components/DataFetch.js';
 
 let forecastLength = 180;
 
@@ -51,6 +52,9 @@ export default function App() {
         }
         {initTimes.length > 0 && 
           <ModelControls filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedInitTime={ selectedInitTime } onInitTimeSelect={ handleSelectedInitTime }/> 
+        }
+        { initTimes.length > 0 &&
+        <DataFetch filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedValidTime={ selectedValidTime } />
         }
       </main>
     </QueryClientProvider>

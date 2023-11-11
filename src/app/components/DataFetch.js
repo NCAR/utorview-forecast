@@ -1,25 +1,32 @@
 'use client'
-let forecastLength = 180; //todo: change this to a global variable
+import { useQueries } from '@tanstack/react-query'
+
+let urlPrefix = "https://wofsdltornado.blob.core.windows.net/wofs-dl-preds/"
 let filePrefix = "wofs_sparse_prob_"
 let variable = "ML_PREDICTED_TOR"
-let urlPrefix = "https://wofsdltornado.blob.core.windows.net/wofs-dl-preds/"
 
-export default function InitTimeFetch({ initTimes, selectedValidTime }) {
-    console.log("render occurred! InitTimeFetch")
+export default function DataFetch({ filteredInitTimes, selectedValidTime }) {
+    console.log("render occurred! DataFetch")
+    let initStrings = getInitStrings(urlPrefix, filePrefix, variable, filteredInitTimes, selectedValidTime);
 
-    let correspondingInitTimes = getCorrespondingInitTimes(initTimes, selectedValidTime);
-    let initStrings = getInitStrings(urlPrefix, filePrefix, variable, correspondingInitTimes, selectedValidTime);
-
-    return (
-        <div>
-            <select>
-                {correspondingInitTimes.map((initTime) => <option key={initTime.toUTCString()} value={initTime.toUTCString()}>{initTime.toUTCString()}</option>)}
-            </select>
-        </div>
-    )
+    const dataQueries = useQueries({
+        queries: initStrings.map((initTimeURL) => {
+          return {
+            queryKey: [initTimeURL],
+            queryFn: async () => {
+                console.log("---------------------------FETCH ATTEMPT MADE: init data -------------------------")
+                let data = await fetch(initTimeURL)
+                return data
+            },
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            refetchOnReconnect: false,
+            staleTime: Infinity,
+            retry: false
+          }
+        }),
+      })
 }
-
-
 
 function formatDateAsString(time) {
     // Returns: A string of numbers representing a date and time. e.g. June 29, 2023 at 23:30 returns '202306292330'.

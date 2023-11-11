@@ -35,8 +35,6 @@ export default function TimeFetch({ onDatesFetch }) {
     if (isError) {
         return <span>Error</span>
     }
-
-    return (<div>dates loaded</div>)
 }
 
 function formatInitTimes(data) {
