@@ -6,8 +6,8 @@ let forecastLength = 180;
 let forecastInterval = 5;
 let forecastMinutesArray = Array.from({ length: (forecastLength / forecastInterval) + 1 }, (_, index) => index * forecastInterval).reverse();
 
-export default function DateFetch({ onDatesFetch }) {
-    console.log("Render occurred! DateFetch")
+export default function ValidTimeFetch({ onDatesFetch }) {
+    console.log("Render occurred! ValidTimeFetch")
     const { isPending, isError, data} = useQuery({
         queryKey: [datesURL],
         queryFn: async () => {
@@ -15,7 +15,7 @@ export default function DateFetch({ onDatesFetch }) {
             const data = await fetch(datesURL).then((res) => res.text());
             const initDatesList = formatInitTimes(data);
             const validDatesList = formatValidTimes(initDatesList);
-            onDatesFetch(validDatesList);
+            onDatesFetch(initDatesList, validDatesList);
             return data
         },
         refetchOnWindowFocus: false,
