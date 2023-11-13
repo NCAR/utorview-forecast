@@ -5,6 +5,7 @@ import TimeFetch from './components/TimeFetch.js';
 import Controls from './components/Controls.js';
 import ModelControls from './components/ModelControls.js';
 import DataFetch from './components/DataFetch.js';
+import Visualization from './components/Visualization.js';
 
 let forecastLength = 180;
 
@@ -54,7 +55,10 @@ export default function App() {
           <ModelControls filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedInitTime={ selectedInitTime } onInitTimeSelect={ handleSelectedInitTime }/> 
         }
         { initTimes.length > 0 &&
-        <DataFetch filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedValidTime={ selectedValidTime } />
+          <DataFetch filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedValidTime={ selectedValidTime } />
+        }
+        { initTimes.length > 0 &&
+          <Visualization selectedValidTime={ selectedValidTime } selectedInitTime={ selectedInitTime } />
         }
       </main>
     </QueryClientProvider>

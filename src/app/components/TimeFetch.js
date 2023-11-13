@@ -29,11 +29,11 @@ export default function TimeFetch({ onDatesFetch }) {
     })
 
     if (isPending) {
-        return <span>Loading...</span>
+        return <span>Loading available model run dates...</span>
     }
 
     if (isError) {
-        return <span>Error</span>
+        return <span>Error fetching dates - try again later.</span>
     }
 }
 

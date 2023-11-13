@@ -1,5 +1,6 @@
 'use client'
 import { useQueries } from '@tanstack/react-query'
+import { decodeAsync } from '@msgpack/msgpack'
 
 let urlPrefix = "https://wofsdltornado.blob.core.windows.net/wofs-dl-preds/"
 let filePrefix = "wofs_sparse_prob_"
@@ -10,13 +11,14 @@ export default function DataFetch({ filteredInitTimes, selectedValidTime }) {
     let initStrings = getInitStrings(urlPrefix, filePrefix, variable, filteredInitTimes, selectedValidTime);
 
     const dataQueries = useQueries({
-        queries: initStrings.map((initTimeURL) => {
+        queries: initStrings.map((initTimeURL, i) => {
           return {
-            queryKey: [initTimeURL],
+            queryKey: [formatDateAsString(filteredInitTimes[i]) + "_" + formatDateAsString(new Date(selectedValidTime))],
             queryFn: async () => {
                 console.log("---------------------------FETCH ATTEMPT MADE: init data -------------------------")
-                let data = await fetch(initTimeURL)
-                return data
+                let response = await fetch(initTimeURL)
+                let decodedResponse = await decodeAsync(response.body)
+                return decodedResponse;
             },
             refetchOnWindowFocus: false,
             refetchOnMount: false,
@@ -25,10 +27,17 @@ export default function DataFetch({ filteredInitTimes, selectedValidTime }) {
             retry: false
           }
         }),
-      })
+    })
+
+    const queryStatuses = dataQueries.map(query => {
+        if (query.status === 'success') {
+            return query.data;
+        } 
+        return null;
+    });
 }
 
-function formatDateAsString(time) {
+export function formatDateAsString(time) {
     // Returns: A string of numbers representing a date and time. e.g. June 29, 2023 at 23:30 returns '202306292330'.
     // Parameter time: A Date object.
 
@@ -44,7 +53,7 @@ function formatDateAsString(time) {
     return dateInNumberFormat + timeInNumberFormat;
 }
 
-function getInitStrings(urlPrefix, filePrefix, variable, filteredInitTimes, selectedValidTime) {
+export function getInitStrings(urlPrefix, filePrefix, variable, filteredInitTimes, selectedValidTime) {
     // Returns: an array of strings representing paths to messagepack files for the given init times.
     // Parameter urlPrefix: string variable set globally. First static section of URL to make messagepack requests to.
     // Parameter filePrefix: string variable set globally. Second static section of URL between the init time and valid time.

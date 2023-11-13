@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@msgpack/msgpack": "^3.0.0-beta2",
     "@tanstack/react-query": "^5.8.1",
     "next": "14.0.1",
     "react": "^18",
