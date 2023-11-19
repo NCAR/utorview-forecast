@@ -6,6 +6,7 @@ import Controls from './components/Controls.js';
 import ModelControls from './components/ModelControls.js';
 import DataFetch from './components/DataFetch.js';
 import Visualization from './components/Visualization.js';
+import Test from './components/Test.js';
 
 let forecastLength = 180;
 
@@ -60,6 +61,8 @@ export default function App() {
         { initTimes.length > 0 &&
           <Visualization selectedValidTime={ selectedValidTime } selectedInitTime={ selectedInitTime } />
         }
+        {/* <Test /> */}
+
       </main>
     </QueryClientProvider>
   )

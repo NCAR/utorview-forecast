@@ -63,10 +63,16 @@ export function getInitStrings(urlPrefix, filePrefix, variable, filteredInitTime
 
     let initStrings = [];
     let formattedSelect = formatDateAsString(new Date(selectedValidTime));
+    let offsetFormattedSelect = formatDateAsString(new Date(new Date(selectedValidTime).getTime() + 86400000))
 
     filteredInitTimes.forEach((time) => {
-        initStrings.push(urlPrefix + formatDateAsString(new Date(time)) + "/" + filePrefix +  formattedSelect + "00" + "_" + variable + ".msgpk")
+        if (time.getUTCHours() <= 4) {
+            initStrings.push(urlPrefix + formatDateAsString(new Date(time)) + "/" + filePrefix +  offsetFormattedSelect + "00" + "_" + variable + ".msgpk")
+        } else {
+            initStrings.push(urlPrefix + formatDateAsString(new Date(time)) + "/" + filePrefix +  formattedSelect + "00" + "_" + variable + ".msgpk")
+        }
     })
 
+    console.log(initStrings)
     return initStrings;
 }

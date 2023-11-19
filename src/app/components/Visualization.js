@@ -10,7 +10,6 @@ let variable = "ML_PREDICTED_TOR"
 export default function Visualization({ selectedValidTime, selectedInitTime }) {
     console.log("render occurred! Visualization")
 
-
     const { isPending, isError, data} = useQuery({
         queryKey: [formatDateAsString(new Date(selectedInitTime)) + "_" + formatDateAsString(new Date(selectedValidTime))],
             queryFn: async () => {
@@ -32,5 +31,6 @@ export default function Visualization({ selectedValidTime, selectedInitTime }) {
 
     if (data) {
         console.log(data)
+        return <div>Requested data successfully loaded.</div>
     }
 }

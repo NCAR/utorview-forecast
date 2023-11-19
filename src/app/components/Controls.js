@@ -1,6 +1,14 @@
 'use client'
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
 export default function Controls({ validTimes, selectedValidTime, onValidTimeSelect }) {
     console.log("Render occurred! Controls")
+
+    let subset = validTimes.slice(0, 250)
 
     return (
         <div>
@@ -9,10 +17,7 @@ export default function Controls({ validTimes, selectedValidTime, onValidTimeSel
             value={selectedValidTime} 
             onChange={e => onValidTimeSelect(e.target.value)} 
             >
-                <option value={validTimes[0]}>{validTimes[0]}</option>
-                <option value={validTimes[1]}>{validTimes[1]}</option>
-                <option value={validTimes[2]}>{validTimes[2]}</option>
-                <option value={validTimes[36]}>{validTimes[36]}</option>
+                {subset.map((validTime) => <option key={validTime} value={validTime}>{validTime}</option>)}
             </select>
         </div>
     )
