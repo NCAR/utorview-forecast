@@ -7,7 +7,7 @@ let urlPrefix = "https://wofsdltornado.blob.core.windows.net/wofs-dl-preds/"
 let filePrefix = "wofs_sparse_prob_"
 let variable = "ML_PREDICTED_TOR"
 
-export default function Visualization({ selectedValidTime, selectedInitTime }) {
+export default function Visualization({ selectedValidTime, selectedInitTime, selectedEnsembleMember, checkedReflectivity, selectedReflectivityOpacity }) {
     console.log("render occurred! Visualization")
 
     const { isPending, isError, data} = useQuery({
