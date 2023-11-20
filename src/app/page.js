@@ -67,6 +67,12 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <main>
         <h1>WoFS UNet Tornado Guidance Viewer</h1>
+
+            <div>
+          State tracker:
+          <p>Valid Time: {new Date(selectedValidTime).toUTCString()} </p>
+          <p>Init Time: {new Date(selectedInitTime).toUTCString()}</p>
+        </div>
     
         <TimeFetch onDatesFetch={ handleDatesFetch } />
         {validTimes.length > 0 && 

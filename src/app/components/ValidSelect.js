@@ -26,7 +26,11 @@ export default function ValidSelect({ validTimes, selectedValidTime, onValidTime
                     label="Valid Times" 
                     value={dayjs(selectedValidTime)}
                     ampm={false}
-                    onChange={(newValue) => onValidTimeSelect(new Date(newValue))} 
+                    onChange={(newValue) => {
+                        if (!shouldDisableDate(newValue)) {
+                            onValidTimeSelect(new Date(newValue))
+                        }
+                    }} 
                     timezone="UTC"
                     closeOnSelect={false}
                 />
