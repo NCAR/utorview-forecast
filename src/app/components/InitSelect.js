@@ -7,18 +7,25 @@ export default function InitSelect({ filteredInitTimes, selectedInitTime, onInit
 
     const numericInitTimes = filteredInitTimes.map(date => date.getTime());
 
-    const minDate = Math.min(...numericInitTimes);
-    const maxDate = Math.max(...numericInitTimes);
+    let minDate = Math.min(...numericInitTimes);
+    let maxDate = Math.max(...numericInitTimes);
 
+    // center slider if only one init time is available
+    if (filteredInitTimes.length == 1) {
+        minDate = numericInitTimes[0] - 1;
+        maxDate = numericInitTimes[0] + 1;
+    } 
+    
     const marks = filteredInitTimes.map(date => ({
         value: date.getTime(),
-        label: date.toUTCString()
+        label: date.toDateString() + "\n" + date.toTimeString()
     }));
 
     return (
         <div>
-            <Box>
+            <Box sx={{paddingLeft: "10em", paddingRight: "10em"}}>
                 <Slider 
+                    // components={{ MarkLabel: "p" }}
                     aria-label="Model run init time"
                     value={(new Date(selectedInitTime)).getTime()}
                     getAriaValueText={dateValueText}
@@ -36,5 +43,5 @@ export default function InitSelect({ filteredInitTimes, selectedInitTime, onInit
 }
 
 function dateValueText(value) {
-    return (new Date(value)).toUTCString();
+    return ((new Date(value)).toUTCString());
 }

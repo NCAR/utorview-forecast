@@ -66,7 +66,9 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <main>
-        <h1>WoFS UNet Tornado Guidance Viewer</h1>
+        <div className="header-container">
+          <h1>WoFS UNet Tornado Guidance Viewer</h1>
+        </div>
         <TimeFetch onDatesFetch={ handleDatesFetch } />
         {validTimes.length > 0 && 
           <div id="controls-container">

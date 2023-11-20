@@ -14,14 +14,14 @@ let ensembleValues = ["median", "mean", "max"].concat(ensembleNum);
 export default function EnsembleSelect({ selectedEnsembleMember, onEnsembleMemberSelect}) {
     return (
         <Box>
-            <FormControl >
+            <FormControl sx={{minWidth: 150}}>
                 <InputLabel id="ensemble-member-select-label">Ensemble Member</InputLabel>
-                <Select
-                labelId="ensemble-member-select-label"
-                id="ensemble-member-select"
-                value={selectedEnsembleMember}
-                label="Ensemble Member"
-                onChange={e => onEnsembleMemberSelect(e.target.value)}
+                <Select 
+                    labelId="ensemble-member-select-label"
+                    id="ensemble-member-select"
+                    value={selectedEnsembleMember}
+                    label="Ensemble Member"
+                    onChange={e => onEnsembleMemberSelect(e.target.value)}
                 >
                     {ensembleValues.map((ensembleValue, i) => <MenuItem key={ensembleValue} value={ensembleValue}>{ensembleLabels[i]}</MenuItem>)}
                 </Select>

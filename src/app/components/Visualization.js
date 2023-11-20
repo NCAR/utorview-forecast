@@ -10,6 +10,7 @@ let variable = "ML_PREDICTED_TOR"
 export default function Visualization({ selectedValidTime, selectedInitTime, selectedEnsembleMember, checkedReflectivity, selectedReflectivityOpacity }) {
     console.log("render occurred! Visualization")
 
+    // requests data that is already in cache after being fetched in DataFetch
     const { isPending, isError, data} = useQuery({
         queryKey: [formatDateAsString(new Date(selectedInitTime)) + "_" + formatDateAsString(new Date(selectedValidTime))],
             queryFn: async () => {

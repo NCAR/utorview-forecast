@@ -8,35 +8,22 @@ export default function ReflectivityOpacity({ selectedOpacity, onOpacitySelect }
 
     return (
         <div>
-            {/* <Box>
-                <Slider 
-                    size="small"
-                    aria-label="Reflectivity opacity slider"
-                    value={selectedOpacity}
-                    valueLabelDisplay="auto"
-                    min={0}
-                    max={100}
-                    onChange={e => onOpacitySelect(e.target.value)} 
-                />
-            </Box> */}
-
-
-        <FormControlLabel sx={{minWidth: 200}}
-            control={
-                <Slider
-                    size="small"
-                    aria-label="Reflectivity opacity slider"
-                    value={selectedOpacity}
-                    valueLabelDisplay="auto"
-                    min={0}
-                    max={100}
-                    onChange={e => onOpacitySelect(e.target.value)} 
-                />
-            } 
-            label="Opacity" 
-            labelPlacement="start"
-        />
-
-</div>
+            <FormControlLabel sx={{minWidth: 200}}
+                control={
+                    <Slider   
+                        sx={{marginLeft: "1em"}}
+                        size="small"
+                        aria-label="Reflectivity opacity slider"
+                        value={selectedOpacity}
+                        valueLabelDisplay="auto"
+                        min={0}
+                        max={100}
+                        onChange={e => onOpacitySelect(e.target.value)} 
+                    />
+                } 
+                label="Opacity" 
+                labelPlacement="start"
+            />
+        </div>
     )
 }
