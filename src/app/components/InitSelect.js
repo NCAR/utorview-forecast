@@ -6,7 +6,6 @@ export default function InitSelect({ filteredInitTimes, selectedInitTime, onInit
     console.log("Render occurred! InitSelect")
 
     const numericInitTimes = filteredInitTimes.map(date => date.getTime());
-    // console.log(numericInitTimes)
 
     const minDate = Math.min(...numericInitTimes);
     const maxDate = Math.max(...numericInitTimes);
@@ -15,8 +14,6 @@ export default function InitSelect({ filteredInitTimes, selectedInitTime, onInit
         value: date.getTime(),
         label: date.toUTCString()
     }));
-
-    console.log(marks)
 
     return (
         <div>

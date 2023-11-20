@@ -31,7 +31,11 @@ export default function App() {
   // updates selected valid time and filtered init times on user input in Controls
   const handleSelectedValidTime = (validTime) => {
     setSelectedValidTime(validTime);
+
+  
     let filteredInitTimes = getCorrespondingInitTimes(initTimes, validTime);
+    
+    
     setSelectedInitTime(filteredInitTimes[filteredInitTimes.length - 1].toUTCString());
   }
 
@@ -73,9 +77,16 @@ function getCorrespondingInitTimes(initTimes, selectedValidTime) {
   // Parameter initTimes: an array of Date objects corresponding to all model run init times.
   // Parameter selectedValidTime: a UTC string representation of the currently selected valid time.
 
+
   let selectedValidTimeUTC = new Date(selectedValidTime);
 
+
+
   let earliestInitTime = new Date(selectedValidTimeUTC.getTime() - forecastLength * 60 * 1000);
+
+  console.log(selectedValidTimeUTC)
+  console.log(earliestInitTime)
+
   let filteredInitTimes = initTimes.filter(date => date >= earliestInitTime && date <= selectedValidTimeUTC);
 
   return filteredInitTimes;

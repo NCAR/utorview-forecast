@@ -1,5 +1,8 @@
 'use client'
 import { useQuery } from '@tanstack/react-query'
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 let datesURL = "https://wofsdltornado.blob.core.windows.net/wofs-dl-preds/available_dates.csv"
 let validInitHours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
@@ -53,6 +56,7 @@ function formatInitTimes(data) {
     }
     dates = dates.filter(function(d) {return validInitHours.includes(d.getUTCHours());});
     dates = dates.sort((a, b) => b - a);
+    console.log(dates)
     return dates;
 }
 
