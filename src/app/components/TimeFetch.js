@@ -56,7 +56,6 @@ function formatInitTimes(data) {
     }
     dates = dates.filter(function(d) {return validInitHours.includes(d.getUTCHours());});
     dates = dates.sort((a, b) => b - a);
-    console.log(dates)
     return dates;
 }
 

@@ -14,24 +14,11 @@ export default function ValidSelect({ validTimes, selectedValidTime, onValidTime
     let subset = validTimes.slice(0, 250)
 
     const shouldDisableDate = (date) => {
-        // Check if the date is not in the array of enabled dates
         return !validTimes.some(validTime => (new Date(validTime)).getTime() === (new Date(date)).getTime());
     };
     
-    // console.log(selectedValidTime)
-    // console.log(new Date(selectedValidTime))
-
-
     return (
         <div>
-            {/* Valid Times
-            <select
-            value={selectedValidTime} 
-            onChange={e => onValidTimeSelect(e.target.value)} 
-            >
-                {subset.map((validTime) => <option key={validTime} value={validTime}>{validTime}</option>)}
-            </select> */}
-
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker 
                     shouldDisableDate={shouldDisableDate}
