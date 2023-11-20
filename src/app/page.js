@@ -2,11 +2,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import TimeFetch from './components/TimeFetch.js';
-import Controls from './components/Controls.js';
-import ModelControls from './components/ModelControls.js';
+import ValidSelect from './components/ValidSelect.js';
+import InitSelect from './components/InitSelect.js';
 import DataFetch from './components/DataFetch.js';
 import Visualization from './components/Visualization.js';
-import Test from './components/Test.js';
 
 let forecastLength = 180;
 
@@ -20,18 +19,20 @@ export default function App() {
   const [selectedInitTime, setSelectedInitTime] = useState([]);
   const [selectedValidTime, setSelectedValidTime] = useState([]);
 
-  // update states once the dates are fetched in ValidTimeFetch
+  // update states once the dates are fetched in TimeFetch
   const handleDatesFetch = (initDates, validDates) => {
     setInitTimes(initDates);
     setValidTimes(validDates);
     setSelectedValidTime(validDates[0]);
-    setSelectedInitTime(getCorrespondingInitTimes(initDates, validDates[0])[0].toUTCString());
+    let filteredInitTimes = getCorrespondingInitTimes(initDates, validDates[0]);
+    setSelectedInitTime(filteredInitTimes[filteredInitTimes.length - 1].toUTCString());
   };
 
   // updates selected valid time and filtered init times on user input in Controls
   const handleSelectedValidTime = (validTime) => {
     setSelectedValidTime(validTime);
-    setSelectedInitTime(getCorrespondingInitTimes(initTimes, validTime)[0].toUTCString());
+    let filteredInitTimes = getCorrespondingInitTimes(initTimes, validTime);
+    setSelectedInitTime(filteredInitTimes[filteredInitTimes.length - 1].toUTCString());
   }
 
   // updates selected init time on user input in Model Controls
@@ -45,15 +46,15 @@ export default function App() {
         <div>
           State tracker:
           <p>Valid Time: {selectedValidTime.toString()} </p>
-          <p>Init Time: {selectedInitTime.toString()}</p>
+          <p>Init Time: {new Date(selectedInitTime).toUTCString()}</p>
         </div>
 
         <TimeFetch onDatesFetch={ handleDatesFetch } />
         {validTimes.length > 0 && 
-          <Controls validTimes={ validTimes } selectedValidTime={ selectedValidTime } onValidTimeSelect={ handleSelectedValidTime } /> 
+          <ValidSelect validTimes={ validTimes } selectedValidTime={ selectedValidTime } onValidTimeSelect={ handleSelectedValidTime } /> 
         }
         {initTimes.length > 0 && 
-          <ModelControls filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedInitTime={ selectedInitTime } onInitTimeSelect={ handleSelectedInitTime }/> 
+          <InitSelect filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedInitTime={ selectedInitTime } onInitTimeSelect={ handleSelectedInitTime }/> 
         }
         { initTimes.length > 0 &&
           <DataFetch filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedValidTime={ selectedValidTime } />
@@ -61,7 +62,6 @@ export default function App() {
         { initTimes.length > 0 &&
           <Visualization selectedValidTime={ selectedValidTime } selectedInitTime={ selectedInitTime } />
         }
-        {/* <Test /> */}
 
       </main>
     </QueryClientProvider>
