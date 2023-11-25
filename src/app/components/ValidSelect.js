@@ -31,6 +31,7 @@ export default function ValidSelect({ validTimes, selectedValidTime, onValidTime
                     }} 
                     timezone="system"
                     closeOnSelect={false}
+                    slotProps={{ textField: { size: "small" } }}
                 />
             </LocalizationProvider>
         </div>

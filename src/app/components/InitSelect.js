@@ -20,7 +20,7 @@ export default function InitSelect({ filteredInitTimes, selectedInitTime, onInit
         value: date.getTime(),
         label: (
             <>
-              {date.toDateString()}
+              {date.toLocaleDateString()}
               <br />
               {date.toLocaleTimeString('en-US', {
                 hour: '2-digit',
@@ -58,5 +58,11 @@ export default function InitSelect({ filteredInitTimes, selectedInitTime, onInit
 }
 
 function dateValueText(value) {
-    return ((new Date(value)).toUTCString());
+    let date = new Date(value);
+    return (date.toLocaleDateString() + " " + date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short', 
+        hour12: false
+    }));
 }

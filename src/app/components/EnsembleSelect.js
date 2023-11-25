@@ -17,6 +17,7 @@ export default function EnsembleSelect({ selectedEnsembleMember, onEnsembleMembe
             <FormControl sx={{minWidth: 150}}>
                 <InputLabel id="ensemble-member-select-label">Ensemble Member</InputLabel>
                 <Select 
+                    size="small"
                     labelId="ensemble-member-select-label"
                     id="ensemble-member-select"
                     value={selectedEnsembleMember}
