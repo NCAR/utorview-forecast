@@ -18,14 +18,24 @@ export default function InitSelect({ filteredInitTimes, selectedInitTime, onInit
     
     const marks = filteredInitTimes.map(date => ({
         value: date.getTime(),
-        label: date.toDateString() + "\n" + date.toTimeString()
+        label: (
+            <>
+              {date.toDateString()}
+              <br />
+              {date.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZoneName: 'short', 
+                hour12: false
+                })}
+            </>
+          )
     }));
 
     return (
         <div>
-            <Box sx={{paddingLeft: "10em", paddingRight: "10em"}}>
+            <Box sx={{paddingLeft: "10em", paddingRight: "10em", paddingBottom: "2em"}}>
                 <Slider 
-                    // components={{ MarkLabel: "p" }}
                     aria-label="Model run init time"
                     value={(new Date(selectedInitTime)).getTime()}
                     getAriaValueText={dateValueText}
@@ -36,6 +46,11 @@ export default function InitSelect({ filteredInitTimes, selectedInitTime, onInit
                     min={minDate}
                     max={maxDate}
                     onChange={e => onInitTimeSelect(e.target.value)} 
+                    sx={{
+                        '& .MuiSlider-markLabel': {
+                          textAlign: 'center'
+                        },
+                      }}
                 />
             </Box>
         </div>

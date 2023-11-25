@@ -11,8 +11,6 @@ dayjs.extend(utc);
 export default function ValidSelect({ validTimes, selectedValidTime, onValidTimeSelect }) {
     console.log("Render occurred! ValidSelect")
 
-    let subset = validTimes.slice(0, 250)
-
     const shouldDisableDate = (date) => {
         return !validTimes.some(validTime => (new Date(validTime)).getTime() === (new Date(date)).getTime());
     };
@@ -31,7 +29,7 @@ export default function ValidSelect({ validTimes, selectedValidTime, onValidTime
                             onValidTimeSelect(new Date(newValue))
                         }
                     }} 
-                    timezone="UTC"
+                    timezone="system"
                     closeOnSelect={false}
                 />
             </LocalizationProvider>
