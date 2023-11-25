@@ -1,10 +1,13 @@
-#controls-top {
+body, html {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5em;
-    padding-top: 1em;
-    padding-bottom: 0.5em;
+    flex-direction: column;
 }
 
 .header-container {
@@ -17,3 +20,17 @@ h1 {
     font-size: 1.5em;
     margin: 0.25em;
 }
+
+#controls-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5em;
+    padding-top: 1em;
+    padding-bottom: 0.5em;
+}
+
+#visualization-container {
+    flex-grow: 1;
+}
+

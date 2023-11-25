@@ -2,6 +2,9 @@
 import { formatDateAsString, getInitStrings } from './DataFetch.js';
 import { useQuery } from '@tanstack/react-query'
 import { decodeAsync } from '@msgpack/msgpack'
+import dynamic from 'next/dynamic';
+
+const Plot = dynamic(()=> {return import ("react-plotly.js")}, {ssr: false})
 
 let urlPrefix = "https://wofsdltornado.blob.core.windows.net/wofs-dl-preds/"
 let filePrefix = "wofs_sparse_prob_"
