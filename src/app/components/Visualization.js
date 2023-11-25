@@ -11,20 +11,7 @@ export default function Visualization({ selectedValidTime, selectedInitTime, sel
     console.log("render occurred! Visualization")
 
     // requests data that is already in cache after being fetched in DataFetch
-    const { isPending, isError, data} = useQuery({
-        queryKey: [formatDateAsString(new Date(selectedInitTime)) + "_" + formatDateAsString(new Date(selectedValidTime))],
-            queryFn: async () => {
-                console.log("---------------------------FETCH ATTEMPT MADE: default init data -------------------------")
-                let response = await fetch(getInitStrings(urlPrefix, filePrefix, variable, selectedInitTime, selectedValidTime)[0])
-                let decodedResponse = await decodeAsync(response.body)
-                return decodedResponse;
-            },
-            refetchOnWindowFocus: false,
-            refetchOnMount: false,
-            refetchOnReconnect: false,
-            staleTime: Infinity,
-            retry: false
-    })
+    const { isPending, isError, data} = useQuery({queryKey: [formatDateAsString(new Date(selectedInitTime)) + "_" + formatDateAsString(new Date(selectedValidTime))],})
 
     if (isPending) {
         return <div>Loading data for visualization...</div>
