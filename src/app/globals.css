@@ -8,6 +8,7 @@ main {
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .header-container {
@@ -34,3 +35,24 @@ h1 {
     flex-grow: 1;
 }
 
+#plotly-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+#map-container, #chart-container {
+    height: 100%;
+    width: 50%;
+}
+
+#map, #chart {
+    height: 100%;
+    width: 50%;
+}
+
+.js-plotly-plot, .plot-container .plotly {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+}
