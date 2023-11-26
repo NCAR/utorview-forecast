@@ -1,10 +1,21 @@
 'use client'
 import { useQueries } from '@tanstack/react-query'
 import { decodeAsync } from '@msgpack/msgpack'
+import proj4 from 'proj4';
 
 let urlPrefix = "https://wofsdltornado.blob.core.windows.net/wofs-dl-preds/"
 let filePrefix = "wofs_sparse_prob_"
 let variable = "ML_PREDICTED_TOR"
+
+let wofs_x_length = 300;
+let wofs_y_length = 300;
+let resolution = 3000;
+let radius = resolution / 2;
+
+// reprojecting the data coordinates
+let orig_proj = "WGS84";
+let base_proj = "+proj=lcc +lat_0=34.321392 +lon_0=-98.0134 +lat_1=30 +lat_2=60 +a=6370000 +b=6370000 +ellps=WGS84";
+let base_transformer = proj4(base_proj, orig_proj);
 
 export default function DataFetch({ filteredInitTimes, selectedValidTime }) {
     console.log("render occurred! DataFetch")
@@ -15,10 +26,13 @@ export default function DataFetch({ filteredInitTimes, selectedValidTime }) {
           return {
             queryKey: [formatDateAsString(filteredInitTimes[i]) + "_" + formatDateAsString(new Date(selectedValidTime))],
             queryFn: async () => {
-                console.log("---------------------------FETCH ATTEMPT MADE: init data -------------------------")
-                let response = await fetch(initTimeURL)
-                let decodedResponse = await decodeAsync(response.body)
-                return decodedResponse;
+                // console.log("---------------------------FETCH ATTEMPT MADE: init data -------------------------")
+                // let response = await fetch(file);
+                // let decodedResponse = await decodeAsync(response.body);
+                // let featureCollectionObj = await buildDataObject(decodedResponse)
+                //   let plot_geom = plot_data[0];
+                //  let plot_coords = plot_data[1];
+                // return featureCollectionObj;
             },
             refetchOnWindowFocus: false,
             refetchOnMount: false,
@@ -55,9 +69,6 @@ export function formatDateAsString(time) {
 
 export function getInitStrings(urlPrefix, filePrefix, variable, filteredInitTimes, selectedValidTime) {
     // Returns: an array of strings representing paths to messagepack files for the given init times.
-    // Parameter urlPrefix: string variable set globally. First static section of URL to make messagepack requests to.
-    // Parameter filePrefix: string variable set globally. Second static section of URL between the init time and valid time.
-    // Parameter variable:  string variable set globally. Third static section of URL following the valid time and preceding the file extension.
     // Parameter filteredInitTimes: an array of Date objects corresponding to model run init times that contain the currently selected valid time.
     // Parameter selectedValidTime: a string representation of a Date object representing the currently selected valid time.
 
@@ -72,7 +83,97 @@ export function getInitStrings(urlPrefix, filePrefix, variable, filteredInitTime
             initStrings.push(urlPrefix + formatDateAsString(new Date(time)) + "/" + filePrefix +  formattedSelect + "00" + "_" + variable + ".msgpk")
         }
     })
-
-    console.log(initStrings)
     return initStrings;
 }
+
+function derive_new_proj(base_transformer, coord) {
+    console.log("derive_new_proj() called")
+    // Returns: a projection object (?), creates projection system from the data for transformation later
+    let center_proj_x = coord[1] + (3000 * 150) + 1500
+    let center_proj_y = coord[0] + (3000 * 150) + 1500
+    let center_lonlat = base_transformer.forward([center_proj_y, center_proj_x])
+    let proj ="+proj=lcc +lat_0=" + center_lonlat[1] + " +lon_0=" + center_lonlat[0] + " +lat_1=30 +lat_2=60 +a=6370000 +b=6370000 +ellps=WGS84";
+  
+    return proj
+}
+  
+export async function buildDataObject(data) {
+    console.log("-------------------build_data_object() called")
+    // Returns: None. for each ensemble member of the requested messagepack data file, creates a FeatureCollection where each data coordinate is represented by a list of cornerpoints that center it
+    // and saves it to a json.
+    // Parameters on initialization: build_data_object(0,1,json,plot_d);
+    let featureCollectionObj = {};
+
+    let base_coord = base_transformer.inverse(data['se_coords']);
+    let wofs_proj = derive_new_proj(base_transformer, base_coord);
+    let transformer = proj4(wofs_proj, orig_proj);
+
+    // // reprojecting the coordinates in the data
+    let coord = transformer.inverse(data['se_coords'])
+    let lon_array_m = create_coord_array(coord[0], wofs_x_length, resolution)
+    let lat_array_m = create_coord_array(coord[1], wofs_y_length, resolution)
+  
+    // // creating a FeatureCollection for each ensemble member
+    for (let ensemble in data) {
+        let subset = data[ensemble];
+        if (subset["rows"]) {
+            let plot_data = create_geom_object(transformer, subset["rows"], subset["columns"], lon_array_m, lat_array_m);
+            featureCollectionObj[ensemble] = plot_data
+        }
+    }
+    
+    // for (let i of d3.range(start, end)) {
+    //   let minutes = i*5
+    //   let subset = data["fm_" + minutes]["MEM_" + selectedEnsemble]
+  
+    //   let plot_data = create_geom_object(transformer, subset["rows"], subset["columns"], lon_array_m, lat_array_m)
+    //   obj_dict_out[minutes + "_" + selectedEnsemble] = plot_data
+    // }
+    return featureCollectionObj;
+  }
+
+  function create_coord_array(coord, len, resolution) {
+    console.log("create_coord_array() called")
+    // Returns: an array of coordinates constructed based on the resolution and length of provided data
+    let array = new Array(len);
+    for (let i=0; i<len; i++) { array[i] = coord + (resolution * i); }
+    return array
+  }
+
+  function create_geom(transformer, i, j, lons, lats) {
+    console.log("create_geom() called")
+    // Returns a list of five (?) coordinates representing the corners of a square on the grid in which a data coordinate is centered
+  
+    // radius representing the size of a grid cell to center the data point within corner coordinates
+    let south_lat_m = lats[i] - radius
+    let north_lat_m = lats[i] + radius
+    let west_lon_m = lons[j] - radius
+    let east_lon_m = lons[j] + radius
+  
+    let se = transformer.forward([east_lon_m, south_lat_m])
+    let ne = transformer.forward([east_lon_m, north_lat_m])
+    let sw = transformer.forward([west_lon_m, south_lat_m])
+    let nw = transformer.forward([west_lon_m, north_lat_m])
+  
+    return [sw, nw, ne, se, sw]
+  }
+  
+  function create_geom_object(transformer, i_indices, j_indices, lons, lats) {
+    console.log("create_geom_object() called")
+    // Returns: FeatureCollection representing the coordinate grid provided as parameters
+    // Parameters on initialization: subset["rows"], subset["columns"], lon_array_m, lat_array_m
+    let coords = new Array(i_indices.length)
+  
+    // making new FeatureCollection of size corresponding to the provided coordinate arrays
+    let grid_obj = {type: "FeatureCollection", features: new Array(i_indices.length)}
+    // constructing an array of cornerpoints for each part of the grid and adding it to the FeatureCollection
+    for (let index=0; index < i_indices.length; index++ ) {
+        coords[index] = [i_indices[index], j_indices[index]]
+        let geom = create_geom(transformer, i_indices[index], j_indices[index], lons, lats)
+        let grid_cell_obj = {type: "Feature",
+                             id: index,
+                             geometry: {type: "Polygon", coordinates: [geom]}}
+        grid_obj["features"][index] = grid_cell_obj
+    }
+    return [grid_obj, coords]
+  }

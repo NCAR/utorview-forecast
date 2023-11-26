@@ -85,8 +85,8 @@ export default function App() {
         }
         { initTimes.length > 0 &&
           <div id="visualization-container">
-            <DataFetch filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedValidTime={ selectedValidTime } />
             <Visualization selectedValidTime={ selectedValidTime } selectedInitTime={ selectedInitTime } selectedEnsembleMember={ selectedEnsembleMember } checkedReflectivity={ checkedReflectivity } selectedReflectivityOpacity={ selectedReflectivityOpacity }/>
+            <DataFetch filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedValidTime={ selectedValidTime } />
           </div>
         }
       </main>
