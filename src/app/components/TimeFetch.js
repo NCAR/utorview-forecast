@@ -1,5 +1,6 @@
 'use client'
 import { useQuery } from '@tanstack/react-query'
+import CircularProgress from '@mui/material/CircularProgress';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
@@ -32,11 +33,16 @@ export default function TimeFetch({ onDatesFetch }) {
     })
 
     if (isPending) {
-        return <span>Loading available model run dates...</span>
+        return (
+            <div className="loading">
+                <CircularProgress />
+                Loading available model run dates...
+            </div>
+        )
     }
 
     if (isError) {
-        return <span>Error fetching dates - try again later.</span>
+        return <div className="loading">Error fetching dates - try again later.</div>
     }
 }
 

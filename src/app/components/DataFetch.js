@@ -81,6 +81,7 @@ export function getInitStrings(urlPrefix, filePrefix, variable, filteredInitTime
             initStrings.push(urlPrefix + formatDateAsString(new Date(time)) + "/" + filePrefix +  formattedSelect + "00" + "_" + variable + ".msgpk")
         }
     })
+
     return initStrings;
 }
 
@@ -167,4 +168,26 @@ export async function buildDataObject(data) {
         grid_obj["features"][index] = grid_cell_obj
     }
     return [grid_obj, coords]
-  }
+}
+
+export function get_wofs_domain_geom(data) {
+    console.log("get_wofs_domain_geom() called")
+
+    let base_coord = base_transformer.inverse(data['se_coords']);
+    let wofs_proj = derive_new_proj(base_transformer, base_coord);
+    let transformer = proj4(wofs_proj, orig_proj);
+    // // reprojecting the coordinates in the data
+    let coord = transformer.inverse(data['se_coords'])
+    let lon_array_m = create_coord_array(coord[0], wofs_x_length, resolution)
+    let lat_array_m = create_coord_array(coord[1], wofs_y_length, resolution)
+
+    let se = transformer.forward([lon_array_m[0], lat_array_m[0]]);
+    let sw = transformer.forward([lon_array_m[wofs_x_length - 1], lat_array_m[0]]);
+    let nw = transformer.forward([lon_array_m[wofs_x_length - 1], lat_array_m[wofs_y_length - 1]]);
+    let ne = transformer.forward([lon_array_m[0], lat_array_m[wofs_y_length - 1]]);
+    let center = transformer.forward([lon_array_m[Math.floor(wofs_x_length / 2)], lat_array_m[Math.floor(wofs_y_length / 2)]])
+    let lons = [se[0], sw[0], nw[0], ne[0], se[0]]
+    let lats = [se[1], sw[1], nw[1], ne[1], se[1]]
+
+    return [lons, lats, center]
+}
