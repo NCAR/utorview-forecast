@@ -49,7 +49,7 @@ h1 {
     width: 100%;
 }
 
-#map-container, #chart-container {
+/* #map-container, #chart-container {
     height: 100%;
     width: 50%;
 }
@@ -57,6 +57,11 @@ h1 {
 #map, #chart {
     height: 100%;
     width: 50%;
+} */
+
+#map-container, #map {
+    height: 100%;
+    width: 100%;
 }
 
 .js-plotly-plot, .plot-container .plotly {

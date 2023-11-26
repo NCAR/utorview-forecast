@@ -81,7 +81,7 @@ export function getInitStrings(urlPrefix, filePrefix, variable, filteredInitTime
             initStrings.push(urlPrefix + formatDateAsString(new Date(time)) + "/" + filePrefix +  formattedSelect + "00" + "_" + variable + ".msgpk")
         }
     })
-
+    console.log(initStrings)
     return initStrings;
 }
 
@@ -122,17 +122,17 @@ export async function buildDataObject(data) {
         }
     }
     return featureCollectionObj;
-  }
+}
 
-  function create_coord_array(coord, len, resolution) {
+function create_coord_array(coord, len, resolution) {
     console.log("create_coord_array() called")
     // Returns: an array of coordinates constructed based on the resolution and length of provided data
     let array = new Array(len);
     for (let i=0; i<len; i++) { array[i] = coord + (resolution * i); }
     return array
-  }
+}
 
-  function create_geom(transformer, i, j, lons, lats) {
+function create_geom(transformer, i, j, lons, lats) {
     console.log("create_geom() called")
     // Returns a list of five (?) coordinates representing the corners of a square on the grid in which a data coordinate is centered
   
@@ -148,9 +148,9 @@ export async function buildDataObject(data) {
     let nw = transformer.forward([west_lon_m, north_lat_m])
   
     return [sw, nw, ne, se, sw]
-  }
+}
   
-  function create_geom_object(transformer, i_indices, j_indices, lons, lats) {
+function create_geom_object(transformer, i_indices, j_indices, lons, lats) {
     console.log("create_geom_object() called")
     // Returns: FeatureCollection representing the coordinate grid provided as parameters
     // Parameters on initialization: subset["rows"], subset["columns"], lon_array_m, lat_array_m
@@ -170,16 +170,12 @@ export async function buildDataObject(data) {
     return [grid_obj, coords]
 }
 
-export function get_wofs_domain_geom(data) {
+export function get_wofs_domain_geom(metadata) {
     console.log("get_wofs_domain_geom() called")
 
-    let base_coord = base_transformer.inverse(data['se_coords']);
-    let wofs_proj = derive_new_proj(base_transformer, base_coord);
-    let transformer = proj4(wofs_proj, orig_proj);
-    // // reprojecting the coordinates in the data
-    let coord = transformer.inverse(data['se_coords'])
-    let lon_array_m = create_coord_array(coord[0], wofs_x_length, resolution)
-    let lat_array_m = create_coord_array(coord[1], wofs_y_length, resolution)
+    let transformer = metadata.transformer;
+    let lon_array_m = metadata.lon_array_m;
+    let lat_array_m = metadata.lat_array_m;
 
     let se = transformer.forward([lon_array_m[0], lat_array_m[0]]);
     let sw = transformer.forward([lon_array_m[wofs_x_length - 1], lat_array_m[0]]);
@@ -190,4 +186,42 @@ export function get_wofs_domain_geom(data) {
     let lats = [se[1], sw[1], nw[1], ne[1], se[1]]
 
     return [lons, lats, center]
+}
+
+export function get_selected_cell_geom(metadata, i, j) {
+    console.log("get_selected_cell_geom() called")
+
+    // Adds a red outline to the selected cell when the user clicks on it
+    let geom = create_geom(metadata.transformer, i, j, metadata.lon_array_m, metadata.lat_array_m)
+    let lons = geom.map(item => item[0])
+    let lats = geom.map(item => item[1])
+  
+    let cell_domain = {
+        type: "scattermapbox",
+        showlegend: false,
+        mode: 'lines',
+        line: {color: 'red', width: 2},
+        lon: lons,
+        lat: lats,
+        hoverinfo: "skip"
+    };
+    return cell_domain
+}
+
+export function getMetadata(data) {
+    let base_coord = base_transformer.inverse(data['se_coords']);
+    let wofs_proj = derive_new_proj(base_transformer, base_coord);
+    let transformer = proj4(wofs_proj, orig_proj);
+    let coord = transformer.inverse(data['se_coords']);
+    let lon_array_m = create_coord_array(coord[0], wofs_x_length, resolution);
+    let lat_array_m = create_coord_array(coord[1], wofs_y_length, resolution);
+
+    return {
+        "base_coord": base_coord,
+        "wofs_proj": wofs_proj,
+        "transformer": transformer,
+        "coord": coord,
+        "lon_array_m": lon_array_m,
+        "lat_array_m": lat_array_m
+    }
 }

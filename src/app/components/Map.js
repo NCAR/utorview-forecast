@@ -4,13 +4,14 @@ const Plot = dynamic(()=> {return import ("react-plotly.js")}, {ssr: false})
 
 let mapConfig = {responsive: true}
 
-export default function Map({ data, domain }) {
+export default function Map({ data, reflData, selectedReflOpacity, domain, onSelectPoint, selectedCellData }) {
     console.log("render occurred! Map")
     let plot_geom = data[0];
     let plot_coords = data[1];
     let plot_values = data[2];
     let total_grid_cells = plot_coords.length;
-    
+
+    let allTraces = [];
 
     let mapData = {
         type: "choroplethmapbox",
@@ -21,15 +22,17 @@ export default function Map({ data, domain }) {
         },
         z: plot_values, // for use in the hover tooltip
         zmin: 0, zmax: 0.75,
-        colorbar: {x: -0.12, thickness: 20},
+        colorbar: {x: 0, thickness: 20, tickfont: {color: 'white'},  bgcolor: 'rgba(0, 0, 0, 0.5)'},
         hoverinfo: "z",
         customdata: plot_coords, 
         colorscale: 'YlGnBu',
         geojson: plot_geom
     }; // referring to FeatureCollection generated from the data
 
+    let reflMapData;
+
     let mapLayout = {
-        margin: { t: 3, b: 10, l: 10, r: 3 },
+        margin: { t: 3, b: 5, l: 5, r: 5 },
         uirevision:'true',
         mapbox: {
             style: "carto-darkmatter",
@@ -57,9 +60,43 @@ export default function Map({ data, domain }) {
         },
     };
 
+    if (reflData) {
+        let plot_geom_r = reflData[0];
+        let plot_coords_r = reflData[1];
+        let plot_values_r = reflData[2];
+        let total_grid_cells_r = plot_coords_r.length;
+
+        let refl_alpha = selectedReflOpacity/100;
+    
+        reflMapData = {
+          type: "choroplethmapbox",
+          locations: Array.from(Array(total_grid_cells_r).keys()),
+          marker: {
+            line: {width: 0},
+            opacity: refl_alpha
+          },
+          z: plot_values_r,
+          zmin: 0, zmax: 80,
+          colorbar: { orientation: 'h', thickness: 15, y: -0.001, x: 0.51, len: 0.95, tickfont: {color: 'white'}, bgcolor: 'rgba(0, 0, 0, 0.5)', ticklabelposition: "outside top"},
+          hoverinfo: "skip",
+          customdata: plot_coords_r,
+          colorscale: 'Jet',
+          geojson: plot_geom_r
+        };
+      } 
+
+    allTraces.push(mapData)
+    if (reflData) {
+        allTraces.push(reflMapData)
+    }
+    if (selectedCellData) {
+        allTraces.push(selectedCellData)
+    }
+    allTraces = allTraces.flat();
+
     return (
-        <div id="map-container">
-            <Plot id="map" data={[mapData].flat()} layout={mapLayout} config={mapConfig} />
+        <div id="map-container" onClick={() => {console.log("seen"); onSelectPoint(null)}}>
+            <Plot id="map" data={allTraces} layout={mapLayout} config={mapConfig} onClick={(e) => onSelectPoint(e)}/>
         </div>
     )
 }
