@@ -26,13 +26,11 @@ export default function DataFetch({ filteredInitTimes, selectedValidTime }) {
           return {
             queryKey: [formatDateAsString(filteredInitTimes[i]) + "_" + formatDateAsString(new Date(selectedValidTime))],
             queryFn: async () => {
-                // console.log("---------------------------FETCH ATTEMPT MADE: init data -------------------------")
-                // let response = await fetch(file);
-                // let decodedResponse = await decodeAsync(response.body);
-                // let featureCollectionObj = await buildDataObject(decodedResponse)
-                //   let plot_geom = plot_data[0];
-                //  let plot_coords = plot_data[1];
-                // return featureCollectionObj;
+                console.log("---------------------------FETCH ATTEMPT MADE: init data -------------------------")
+                let response = await fetch(initTimeURL)
+                let decodedResponse = await decodeAsync(response.body)
+                let featureCollectionObj = await buildDataObject(decodedResponse)
+                return featureCollectionObj;
             },
             refetchOnWindowFocus: false,
             refetchOnMount: false,
@@ -118,17 +116,10 @@ export async function buildDataObject(data) {
         let subset = data[ensemble];
         if (subset["rows"]) {
             let plot_data = create_geom_object(transformer, subset["rows"], subset["columns"], lon_array_m, lat_array_m);
+            plot_data.push(subset["values"])
             featureCollectionObj[ensemble] = plot_data
         }
     }
-    
-    // for (let i of d3.range(start, end)) {
-    //   let minutes = i*5
-    //   let subset = data["fm_" + minutes]["MEM_" + selectedEnsemble]
-  
-    //   let plot_data = create_geom_object(transformer, subset["rows"], subset["columns"], lon_array_m, lat_array_m)
-    //   obj_dict_out[minutes + "_" + selectedEnsemble] = plot_data
-    // }
     return featureCollectionObj;
   }
 

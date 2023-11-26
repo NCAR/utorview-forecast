@@ -31,7 +31,6 @@ let mapData = [
 ];
 
 let mapLayout = {
-    hovermode: false,
     margin: { t: 3, b: 10, l: 10, r: 3 },
     uirevision:'true',
     mapbox: {
@@ -47,16 +46,15 @@ let mapLayout = {
           type: "line",
           color: "#BA9DD5",
           line: {"width": 0.25},
-        //   below: "traces"
+          below: "traces"
         },
         {
           sourcetype: "geojson",
           source: "/cnty_warn_bnds.json", // county warning boundaries
           type: "line",
           color: "yellow",
-        //   line: {"width": 0.4, opacity: 0.0},
-          line: {"width": 0.25},
-        //   below: "traces"
+          line: {"width": 0.4, opacity: 0.0},
+          below: "traces"
         }
       ],
       zoom: 3,
@@ -83,8 +81,8 @@ export default function Visualization({ selectedValidTime, selectedInitTime, sel
          
             let response = await fetch(initTimeURL)
             let decodedResponse = await decodeAsync(response.body)
+            console.log(decodedResponse)
             let featureCollectionObj = await buildDataObject(decodedResponse)
-
             return featureCollectionObj;
         },
         refetchOnWindowFocus: false,
@@ -103,25 +101,31 @@ export default function Visualization({ selectedValidTime, selectedInitTime, sel
     }
 
     if (data) {
-        // mapData = {
-        //     type: "choroplethmapbox",
-        //     locations: d3.range(total_grid_cells), // length of data (number of rows)
-        //     marker: {
-        //       line: {width: 0},
-        //       opacity: 0.7
-        //     },
-        //     z: json['fm_' + selectedForecast]['MEM_' + selectedEnsemble]['values'], // for use in the hover tooltip
-        //     zmin: 0, zmax: 0.75,
-        //     colorbar: {x: -0.12, thickness: 20},
-        //     hoverinfo: "z",
-        //     customdata: plot_coords, 
-        //     colorscale: 'YlGnBu',
-        //     geojson: plot_geom
-        // }; // referring to FeatureCollection generated from the data
-        
+        console.log(data)
+        let plot_geom = data["MEM_" + selectedEnsembleMember][0];
+        let plot_coords = data["MEM_" + selectedEnsembleMember][1];
+        let plot_values = data["MEM_" + selectedEnsembleMember][2];
+        let total_grid_cells = plot_coords.length;
+
+        mapData = {
+            type: "choroplethmapbox",
+            locations: Array.from(Array(total_grid_cells).keys()), // length of data (number of rows)
+            marker: {
+              line: {width: 0},
+              opacity: 0.7
+            },
+            z: plot_values, // for use in the hover tooltip
+            zmin: 0, zmax: 0.75,
+            colorbar: {x: -0.12, thickness: 20},
+            hoverinfo: "z",
+            customdata: plot_coords, 
+            colorscale: 'YlGnBu',
+            geojson: plot_geom
+        }; // referring to FeatureCollection generated from the data
+        console.log([mapData].flat())
         return (
             <div id="plotly-container">
-                <Map data={mapData} layout={mapLayout} config={mapConfig} />
+                <Map data={[mapData].flat()} layout={mapLayout} config={mapConfig} />
                 <Chart layout={chartLayout} config={chartConfig} />
             </div>
         )
