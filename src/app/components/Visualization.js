@@ -35,12 +35,7 @@ export default function Visualization({ selectedValidTime, selectedInitTime, sel
             let featureCollectionObj = await buildDataObject(decodedResponse)
             domain = get_wofs_domain_geom(metadata);
             return featureCollectionObj;
-        },
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        staleTime: Infinity,
-        retry: false
+        }
     })
 
     const { isLoading: reflPending, isError: reflError, data: reflData} = useQuery({
@@ -59,12 +54,7 @@ export default function Visualization({ selectedValidTime, selectedInitTime, sel
     
             return featureCollectionObj;
         },
-        enabled: !!checkedReflectivity,
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        staleTime: Infinity,
-        retry: false
+        enabled: !!checkedReflectivity
     })
 
     if (isPending || isLoading) {

@@ -15,7 +15,15 @@ import Visualization from './components/Visualization.js';
 
 let forecastLength = 180;
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { 
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    staleTime: Infinity,
+    retry: false
+  } }
+});
 
 export default function App() {
   console.log("Render occurred! App")

@@ -31,12 +31,7 @@ export default function DataFetch({ filteredInitTimes, selectedValidTime }) {
                 let decodedResponse = await decodeAsync(response.body)
                 let featureCollectionObj = await buildDataObject(decodedResponse)
                 return featureCollectionObj;
-            },
-            refetchOnWindowFocus: false,
-            refetchOnMount: false,
-            refetchOnReconnect: false,
-            staleTime: Infinity,
-            retry: false
+            }
           }
         }),
     })

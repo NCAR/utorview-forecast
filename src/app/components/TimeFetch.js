@@ -24,12 +24,7 @@ export default function TimeFetch({ onDatesFetch }) {
 
             onDatesFetch(initDatesList, validDatesList);
             return data
-        },
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        staleTime: Infinity,
-        retry: false
+        }
     })
 
     if (isPending) {
