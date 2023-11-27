@@ -41,7 +41,7 @@ export default function Map({ data, reflData, selectedReflOpacity, domain, onSel
             layers: [
             {
                 sourcetype: "geojson",
-                source: "/geojson-counties-fips.json", // county boundaries
+                source: "/simplified-geojson-counties-fips.json", // county boundaries
                 type: "line",
                 color: "#BA9DD5",
                 line: {"width": 0.25},
@@ -49,7 +49,7 @@ export default function Map({ data, reflData, selectedReflOpacity, domain, onSel
             },
             {
                 sourcetype: "geojson",
-                source: "/cnty_warn_bnds.json", // county warning boundaries
+                source: "/simplified_cnty_warn_bnds.json", // county warning boundaries
                 type: "line",
                 color: "yellow",
                 line: {"width": 0.4, opacity: 0.0},
@@ -95,7 +95,7 @@ export default function Map({ data, reflData, selectedReflOpacity, domain, onSel
     allTraces = allTraces.flat();
 
     return (
-        <div id="map-container" onClick={() => {console.log("seen"); onSelectPoint(null)}}>
+        <div id="map-container" onClick={() => onSelectPoint(null)}>
             <Plot id="map" data={allTraces} layout={mapLayout} config={mapConfig} onClick={(e) => onSelectPoint(e)}/>
         </div>
     )
