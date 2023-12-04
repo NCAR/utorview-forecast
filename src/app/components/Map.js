@@ -41,7 +41,7 @@ export default function Map({ data, reflData, selectedReflOpacity, domain, onSel
             layers: [
             {
                 sourcetype: "geojson",
-                source: "/simplified-geojson-counties-fips.json", // county boundaries
+                source: "/utorview-forecast/simplified-geojson-counties-fips.json", // county boundaries
                 type: "line",
                 color: "#BA9DD5",
                 line: {"width": 0.25},
@@ -49,7 +49,7 @@ export default function Map({ data, reflData, selectedReflOpacity, domain, onSel
             },
             {
                 sourcetype: "geojson",
-                source: "/simplified_cnty_warn_bnds.json", // county warning boundaries
+                source: "/utorview-forecast/simplified_cnty_warn_bnds.json", // county warning boundaries
                 type: "line",
                 color: "yellow",
                 line: {"width": 0.4, opacity: 0.0},
