@@ -29,7 +29,7 @@ export default function ValidSelect({ validTimes, selectedValidTime, onValidTime
                             onValidTimeSelect(new Date(newValue))
                         }
                     }} 
-                    timezone="UTC"
+                    timezone="system"
                     closeOnSelect={false}
                     slotProps={{ textField: { size: "small" } }}
                 />

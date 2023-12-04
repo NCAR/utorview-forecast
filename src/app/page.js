@@ -59,14 +59,17 @@ export default function App() {
     setSelectedInitTime(initTime);
   }
 
+  // updates selected ensemble member data
   const handleSelectedEnsembleMember = (ensembleMember) => {
     setSelectedEnsembleMember(ensembleMember);
   }
 
+  // updates whether or not reflectivity is shown
   const handleCheckedReflectivity = () => {
     setCheckedReflectivity(!checkedReflectivity);
   }
 
+  // updates opacity of reflectivity layer
   const handleSelectedOpacity = (opacity) => {
     setSelectedOpacity(opacity);
   }
@@ -104,6 +107,7 @@ export default function App() {
 
 function getCorrespondingInitTimes(initTimes, selectedValidTime) {
   // Returns: an array of Date objects corresponding to model run init times that include predictions for the selected valid time.
+  // Uses global variable forecastLength (default 180 mins).
   // Parameter initTimes: an array of Date objects corresponding to all model run init times.
   // Parameter selectedValidTime: a UTC string representation of the currently selected valid time.
   

@@ -19,26 +19,26 @@ export default function InitSelect({ filteredInitTimes, selectedInitTime, onInit
     const marks = filteredInitTimes.map(date => ({
         value: date.getTime(),
         label: (
-            // <>
-            //   {date.toLocaleDateString()}
-            //   <br />
-            //   {date.toLocaleTimeString('en-US', {
-            //     hour: '2-digit',
-            //     minute: '2-digit',
-            //     timeZoneName: 'short', 
-            //     hour12: false
-            //     })}
-            // </>
             <>
-                {date.toDateString()}
-                <br />
-                {date.toTimeString('en-US', {
+              {date.toLocaleDateString()}
+              <br />
+              {date.toLocaleTimeString('en-US', {
                 hour: '2-digit',
-                    minute: '2-digit',
-                    timeZoneName: 'short', 
-                    hour12: false
+                minute: '2-digit',
+                timeZoneName: 'short', 
+                hour12: false
                 })}
             </>
+            // <>
+            //     {date.toDateString()}
+            //     <br />
+            //     {date.toTimeString('en-US', {
+            //     hour: '2-digit',
+            //         minute: '2-digit',
+            //         timeZoneName: 'short', 
+            //         hour12: false
+            //     })}
+            // </>
           )
     }));
 
@@ -69,7 +69,7 @@ export default function InitSelect({ filteredInitTimes, selectedInitTime, onInit
 
 function dateValueText(value) {
     let date = new Date(value);
-    return (date.toDateString() + " " + date.toTimeString('en-US', {
+    return (date.toLocaleDateString() + " " + date.toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
         timeZoneName: 'short', 
