@@ -14,12 +14,22 @@ let metadata;
 let domain;
 let cell_domain;
 
-export default function Visualization({ selectedValidTime, selectedInitTime, selectedEnsembleMember, checkedReflectivity, selectedReflectivityOpacity }) {
+export default function Visualization({ selectedValidTime, selectedInitTime, selectedEnsembleMember, checkedReflectivity, selectedReflectivityOpacity, selectedViews, onCellSelect }) {
     console.log("render occurred! Visualization")
     const [selectedPoint, setSelectedPoint] = useState(null);
 
     function handleSelectPoint(e) {
         setSelectedPoint(e ? e.points[0].customdata : null);
+        if (e) {
+            if (!selectedViews.includes("chart")) {
+                onCellSelect(e, ["map", "chart"])
+            } 
+        } else {
+            if (selectedViews.includes("chart")) {
+                onCellSelect(e, ["map"])
+            } 
+        }
+        
     }
 
     const { isPending, isLoading, isError, data} = useQuery({
@@ -48,8 +58,6 @@ export default function Visualization({ selectedValidTime, selectedInitTime, sel
             let response = await fetch(initTimeURL)
             let decodedResponse = await decodeAsync(response.body)
 
-            console.log(decodedResponse)
-            
             let featureCollectionObj = await buildDataObject(decodedResponse)
     
             return featureCollectionObj;
@@ -75,9 +83,28 @@ export default function Visualization({ selectedValidTime, selectedInitTime, sel
 
         return (
             <div id="plotly-container">
-                {reflPending && <CircularProgress sx={{position: "absolute", top: "50%", left: "50%", zIndex: 1000}}/>}
-                <Map data={data["MEM_" + selectedEnsembleMember]} reflData={(reflData && checkedReflectivity) ? reflData["MEM_" + selectedEnsembleMember] : null} selectedReflOpacity={selectedReflectivityOpacity} domain={domain} onSelectPoint={handleSelectPoint} selectedCellData={cell_domain} />
-                {/* <Chart data={data["MEM_" + selectedEnsembleMember]} selectedPoint={selectedPoint} /> */}
+                {reflPending && 
+                    <CircularProgress sx={{position: "absolute", top: "50%", left: "50%", zIndex: 1000}}/>
+                }
+
+                {selectedViews.includes("map") &&
+                    <Map 
+                        data={data["MEM_" + selectedEnsembleMember]} 
+                        reflData={(reflData && checkedReflectivity) ? reflData["MEM_" + selectedEnsembleMember] : null} 
+                        selectedReflOpacity={selectedReflectivityOpacity} 
+                        domain={domain} 
+                        onSelectPoint={ handleSelectPoint } 
+                        selectedCellData={cell_domain} 
+                    />
+                }
+
+                {selectedViews.includes("chart") &&
+                    <Chart 
+                        data={data["MEM_" + selectedEnsembleMember]} 
+                        selectedPoint={selectedPoint} 
+                        domain={domain} 
+                    />
+                }
             </div>
         )
     }

@@ -86,12 +86,8 @@ export default function Map({ data, reflData, selectedReflOpacity, domain, onSel
       } 
 
     allTraces.push(mapData)
-    if (reflData) {
-        allTraces.push(reflMapData)
-    }
-    if (selectedCellData) {
-        allTraces.push(selectedCellData)
-    }
+    if (reflData) {allTraces.push(reflMapData)}
+    if (selectedCellData) {allTraces.push(selectedCellData)}
     allTraces = allTraces.flat();
 
     return (

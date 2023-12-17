@@ -9,6 +9,7 @@ import InitSelect from './components/InitSelect.js';
 import EnsembleSelect from './components/EnsembleSelect.js';
 import ReflectivityCheck from './components/ReflectivityCheck.js';
 import ReflectivityOpacity from './components/ReflectivityOpacity.js';
+import ViewToggle from './components/ViewToggle.js';
 
 import DataFetch from './components/DataFetch.js';
 import Visualization from './components/Visualization.js';
@@ -37,6 +38,8 @@ export default function App() {
 
   const [checkedReflectivity, setCheckedReflectivity] = useState(false);
   const [selectedReflectivityOpacity, setSelectedOpacity] = useState(10);
+
+  const [selectedViews, setSelectedViews] = useState(() => ["map"]);
 
   // update states once the dates are fetched in TimeFetch
   const handleDatesFetch = (initDates, validDates) => {
@@ -74,6 +77,13 @@ export default function App() {
     setSelectedOpacity(opacity);
   }
 
+  const handleSelectedViews = (e, shownViews) => {
+    if (shownViews.length == 0) {
+      shownViews = ["map", "chart"];
+    }
+    setSelectedViews(shownViews);
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <main>
@@ -86,8 +96,9 @@ export default function App() {
             <div id="controls-top">
               <ValidSelect validTimes={ validTimes } selectedValidTime={ selectedValidTime } onValidTimeSelect={ handleSelectedValidTime } /> 
               <EnsembleSelect selectedEnsembleMember={ selectedEnsembleMember} onEnsembleMemberSelect={ handleSelectedEnsembleMember } />
-              <ReflectivityCheck checked={ checkedReflectivity } onCheck={handleCheckedReflectivity} />
-              <ReflectivityOpacity selectedOpacity={ selectedReflectivityOpacity } onOpacitySelect={ handleSelectedOpacity} />
+              <ReflectivityCheck checked={ checkedReflectivity } onCheck={ handleCheckedReflectivity } />
+              <ReflectivityOpacity enabled={ checkedReflectivity } selectedOpacity={ selectedReflectivityOpacity } onOpacitySelect={ handleSelectedOpacity} />
+              <ViewToggle selectedViews={ selectedViews } onSelectedViews={ handleSelectedViews }/>
             </div>
             <div id="controls-range">
               <InitSelect filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedInitTime={ selectedInitTime } onInitTimeSelect={ handleSelectedInitTime }/> 
@@ -96,7 +107,15 @@ export default function App() {
         }
         { initTimes.length > 0 &&
           <div id="visualization-container">
-            <Visualization selectedValidTime={ selectedValidTime } selectedInitTime={ selectedInitTime } selectedEnsembleMember={ selectedEnsembleMember } checkedReflectivity={ checkedReflectivity } selectedReflectivityOpacity={ selectedReflectivityOpacity }/>
+            <Visualization 
+              selectedValidTime={ selectedValidTime } 
+              selectedInitTime={ selectedInitTime } 
+              selectedEnsembleMember={ selectedEnsembleMember } 
+              checkedReflectivity={ checkedReflectivity } 
+              selectedReflectivityOpacity={ selectedReflectivityOpacity } 
+              selectedViews={ selectedViews }
+              onCellSelect={ handleSelectedViews }
+            />
             <DataFetch filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) } selectedValidTime={ selectedValidTime } />
           </div>
         }

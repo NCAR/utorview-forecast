@@ -1,9 +1,8 @@
 'use client'
-import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-export default function ReflectivityOpacity({ selectedOpacity, onOpacitySelect }) {
+export default function ReflectivityOpacity({ enabled, selectedOpacity, onOpacitySelect }) {
     console.log("Render occurred! InitSelect")
 
     return (
@@ -11,6 +10,7 @@ export default function ReflectivityOpacity({ selectedOpacity, onOpacitySelect }
             <FormControlLabel sx={{minWidth: 200}}
                 control={
                     <Slider   
+                        disabled={!enabled}
                         sx={{marginLeft: "1em"}}
                         size="small"
                         aria-label="Reflectivity opacity slider"

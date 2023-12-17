@@ -76,7 +76,6 @@ export function getInitStrings(urlPrefix, filePrefix, variable, filteredInitTime
             initStrings.push(urlPrefix + formatDateAsString(new Date(time)) + "/" + filePrefix +  formattedSelect + "00" + "_" + variable + ".msgpk")
         }
     })
-    console.log(initStrings)
     return initStrings;
 }
 

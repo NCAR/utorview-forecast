@@ -49,18 +49,22 @@ h1 {
     width: 100%;
 }
 
-/* #map-container, #chart-container {
+#map-container, #chart-container {
     height: 100%;
-    width: 50%;
+    width: 100%;
 }
+
 
 #map, #chart {
     height: 100%;
-    width: 50%;
-} */
+    width: 100%;
+}
 
-#map-container, #map {
-    height: 100%;
+.split-view {
+    width: 50%;
+}
+
+.full-width {
     width: 100%;
 }
 
