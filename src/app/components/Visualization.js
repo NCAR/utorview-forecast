@@ -28,10 +28,6 @@ export default function Visualization({ selectedValidTime, selectedInitTime, fil
             if (!selectedViews.includes("chart")) {
                 onCellSelect(e, ["map", "chart"])
             } 
-        } else {
-            if (selectedViews.includes("chart")) {
-                onCellSelect(e, ["map"])
-            } 
         }
     }
 
