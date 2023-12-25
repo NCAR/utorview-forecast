@@ -88,10 +88,23 @@ h1 {
 
     #controls-top {
         flex-wrap: wrap;
+        gap: 0.5em;
     }
 
     #init-selector {
         padding-left: 2em;
         padding-right: 2em;
+    }
+
+    #map-container, #chart-container {
+        height: 100vh;
+    }
+
+    body, html {
+        max-height: 200vh;
+    }
+
+    main {
+        overflow: visible;
     }
 }

@@ -15,22 +15,21 @@ let forecastLength = 180;
 let forecastInterval = 5;
 let forecastMinutesArray = Array.from({ length: (forecastLength / forecastInterval) + 1 }, (_, index) => index * forecastInterval).reverse();
 
-let chartConfig = {responsive: true}
 
 export default function Chart({ selectedValidTime, selectedInitTime, selectedPoint, domain }) {
     console.log("render occurred! Chart")
 
     let validStartTime = useMemo(() => 
         (new Date(selectedInitTime).getUTCHours() <= 4) ? 
-            (new Date(new Date(selectedValidTime).getTime() + 86400000)) : new Date(selectedInitTime),
+            (new Date(new Date(selectedInitTime).getTime() + 86400000)) : new Date(selectedInitTime),
         [selectedInitTime, selectedValidTime]
     );    
     
     let forecastDates = useMemo(() => 
-        forecastMinutesArray.reverse().map(timestamp => 
+        forecastMinutesArray.map(timestamp => 
             new Date(validStartTime.getTime() + (timestamp * 60000))
         ),
-        [validStartTime]
+        [selectedInitTime, selectedValidTime, validStartTime]
     );
     
     let initStrings = getOneModelRunStrings(selectedInitTime, forecastDates);
@@ -49,6 +48,53 @@ export default function Chart({ selectedValidTime, selectedInitTime, selectedPoi
         }),
     })
 
+    if (!selectedPoint) {
+        let data = [
+            {
+              type: 'scatter',
+              x: [],
+              y: []
+            }
+          ];
+        
+          let layout = {
+            margin: {t: 25, b: 90, l: 70, r: 60},
+            xaxis: {
+              title: 'Forecast Date/Time',
+              range: [0,1],
+              showticklabels: false,
+              titlefont: {size: 18}
+            },
+            yaxis: {
+              title: 'Probability of Tornado',
+              range: [0,1],
+              showticklabels: false,
+              titlefont: {size: 20}
+            },
+            annotations: [
+              {
+                x: 0.5,
+                y: 0.5,
+                xref: 'paper',
+                yref: 'paper',
+                text: 'Select a cell on the map to get spaghetti plot data.',
+                showarrow: false,
+                font: {
+                  family: 'Arial',
+                  size: 14
+                }
+              }
+            ]
+          };
+
+          let config = {responsive: true};
+          return (
+            <div id="chart-container">
+                <Plot id="chart" data={data} layout={layout} config={config} />
+            </div>
+        )
+    }
+
     const cellData = chartDataQueries.map(query => {
         if (query.status === 'success') {
             return getSelectedCellData(query.data, selectedPoint);
@@ -56,18 +102,11 @@ export default function Chart({ selectedValidTime, selectedInitTime, selectedPoi
         return null;
     });
 
-    let spaghettiTraces = {
-        // x: [fcst_dates[Math.floor(msg_file_len/2)]],
-        // y: [0.25],
-        type: 'scatter',
-        showlegend: false,
-        opacity: 0
-    };
 
     if (cellData.some(e => e === null)) {
         return (
             <div id="chart-container">
-                loading...
+                Building spaghetti plot...
             </div>
         )
     } else {
