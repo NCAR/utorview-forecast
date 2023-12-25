@@ -14,12 +14,16 @@ let metadata;
 let domain;
 let cell_domain;
 
-export default function Visualization({ selectedValidTime, selectedInitTime, selectedEnsembleMember, checkedReflectivity, selectedReflectivityOpacity, selectedViews, onCellSelect }) {
+export default function Visualization({ selectedValidTime, selectedInitTime, filteredInitTimes, selectedEnsembleMember, checkedReflectivity, selectedReflectivityOpacity, selectedViews, onCellSelect }) {
     console.log("render occurred! Visualization")
     const [selectedPoint, setSelectedPoint] = useState(null);
 
     function handleSelectPoint(e) {
+        console.log("pt selection detected")
+
         setSelectedPoint(e ? e.points[0].customdata : null);
+        console.log(e ? e.points[0].customdata : null)
+
         if (e) {
             if (!selectedViews.includes("chart")) {
                 onCellSelect(e, ["map", "chart"])
@@ -29,7 +33,6 @@ export default function Visualization({ selectedValidTime, selectedInitTime, sel
                 onCellSelect(e, ["map"])
             } 
         }
-        
     }
 
     const { isPending, isLoading, isError, data} = useQuery({
@@ -100,9 +103,10 @@ export default function Visualization({ selectedValidTime, selectedInitTime, sel
 
                 {selectedViews.includes("chart") &&
                     <Chart 
-                        data={data["MEM_" + selectedEnsembleMember]} 
-                        selectedPoint={selectedPoint} 
-                        domain={domain} 
+                        selectedValidTime={ selectedValidTime }
+                        selectedInitTime={ selectedInitTime }
+                        selectedPoint={ selectedPoint } 
+                        domain={ domain } 
                     />
                 }
             </div>

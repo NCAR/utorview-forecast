@@ -44,7 +44,7 @@ export default function InitSelect({ filteredInitTimes, selectedInitTime, onInit
 
     return (
         <div>
-            <Box sx={{paddingLeft: "10em", paddingRight: "10em", paddingBottom: "2em"}}>
+            <div id="init-selector">
                 <Slider 
                     aria-label="Model run init time"
                     value={(new Date(selectedInitTime)).getTime()}
@@ -62,7 +62,7 @@ export default function InitSelect({ filteredInitTimes, selectedInitTime, onInit
                         },
                       }}
                 />
-            </Box>
+            </div>
         </div>
     )
 }

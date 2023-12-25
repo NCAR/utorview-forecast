@@ -39,6 +39,12 @@ h1 {
     padding-bottom: 0.15em;
 }
 
+#init-selector {
+    padding-left: 10em;
+    padding-right: 10em;
+    padding-bottom: 2em;
+}
+
 #visualization-container {
     flex-grow: 1;
 }
@@ -72,4 +78,20 @@ h1 {
     height: 100%;
     width: 100%;
     padding: 0;
+}
+
+
+@media (max-width: 1000px) {
+    #plotly-container {
+        flex-direction: column;
+    }
+
+    #controls-top {
+        flex-wrap: wrap;
+    }
+
+    #init-selector {
+        padding-left: 2em;
+        padding-right: 2em;
+    }
 }

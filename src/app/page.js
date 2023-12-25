@@ -34,6 +34,8 @@ export default function App() {
   const [selectedInitTime, setSelectedInitTime] = useState([]);
   const [selectedValidTime, setSelectedValidTime] = useState([]);
 
+  console.log(selectedValidTime)
+
   const [selectedEnsembleMember, setSelectedEnsembleMember] = useState("median");
 
   const [checkedReflectivity, setCheckedReflectivity] = useState(false);
@@ -87,10 +89,13 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <main>
+
         <div className="header-container">
           <h1>WoFS UNet Tornado Guidance Viewer</h1>
         </div>
+
         <TimeFetch onDatesFetch={ handleDatesFetch } />
+
         {validTimes.length > 0 && 
           <div id="controls-container">
             <div id="controls-top">
@@ -105,11 +110,13 @@ export default function App() {
             </div>
           </div>  
         }
+
         { initTimes.length > 0 &&
           <div id="visualization-container">
             <Visualization 
               selectedValidTime={ selectedValidTime } 
               selectedInitTime={ selectedInitTime } 
+              filteredInitTimes={ getCorrespondingInitTimes(initTimes, selectedValidTime) }
               selectedEnsembleMember={ selectedEnsembleMember } 
               checkedReflectivity={ checkedReflectivity } 
               selectedReflectivityOpacity={ selectedReflectivityOpacity } 

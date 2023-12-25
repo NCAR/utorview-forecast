@@ -34,7 +34,7 @@ export default function DataFetch({ filteredInitTimes, selectedValidTime }) {
             }
           }
         }),
-    })
+    });
 
     const queryStatuses = dataQueries.map(query => {
         if (query.status === 'success') {
