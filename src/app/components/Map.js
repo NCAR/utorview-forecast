@@ -22,7 +22,13 @@ export default function Map({ data, reflData, selectedReflOpacity, domain, onSel
         },
         z: plot_values, // for use in the hover tooltip
         zmin: 0, zmax: 0.75,
-        colorbar: {x: 0, thickness: 20, tickfont: {color: 'white'},  bgcolor: 'rgba(0, 0, 0, 0.5)'},
+        colorbar: {
+            title: {text: 'Probability', font: {color: 'white'}},
+            x: 0, 
+            thickness: 20, 
+            tickfont: {color: 'white'},  
+            bgcolor: 'rgba(0, 0, 0, 0.5)'
+        },
         hoverinfo: "z",
         customdata: plot_coords, 
         colorscale: 'YlGnBu',
@@ -77,7 +83,17 @@ export default function Map({ data, reflData, selectedReflOpacity, domain, onSel
           },
           z: plot_values_r,
           zmin: 0, zmax: 80,
-          colorbar: { orientation: 'h', thickness: 15, y: -0.001, x: 0.51, len: 0.95, tickfont: {color: 'white'}, bgcolor: 'rgba(0, 0, 0, 0.5)', ticklabelposition: "outside top"},
+          colorbar: { 
+            title: {text: 'dBZ', font: {color: 'white'}},
+            orientation: 'h', 
+            thickness: 15, 
+            y: -0.001, 
+            x: 0.51, 
+            len: 0.95, 
+            tickfont: {color: 'white'}, 
+            bgcolor: 'rgba(0, 0, 0, 0.5)', 
+            ticklabelposition: "outside top"
+          },
           hoverinfo: "skip",
           customdata: plot_coords_r,
           colorscale: 'Jet',
@@ -85,6 +101,7 @@ export default function Map({ data, reflData, selectedReflOpacity, domain, onSel
         };
       } 
 
+    // pushing all requested data to an array that is then passed to Plotly
     allTraces.push(mapData)
     if (reflData) {allTraces.push(reflMapData)}
     if (selectedCellData) {allTraces.push(selectedCellData)}

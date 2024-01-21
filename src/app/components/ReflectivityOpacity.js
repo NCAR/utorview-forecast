@@ -11,7 +11,7 @@ export default function ReflectivityOpacity({ enabled, selectedOpacity, onOpacit
                 control={
                     <Slider   
                         disabled={!enabled}
-                        sx={{marginLeft: "1em"}}
+                        sx={{marginLeft: "1em", marginRight: "1em"}}
                         size="small"
                         aria-label="Reflectivity opacity slider"
                         value={selectedOpacity}

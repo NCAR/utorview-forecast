@@ -15,6 +15,7 @@ export default function ViewToggle({ selectedViews, onSelectedViews }) {
       >
         <ToggleButton value="map" aria-label="map">
             <Image
+                className="toggle-icon"
                 src="/utorview-forecast/map-icon.svg"
                 width={20}
                 height={20}
@@ -23,6 +24,7 @@ export default function ViewToggle({ selectedViews, onSelectedViews }) {
         </ToggleButton>
         <ToggleButton value="chart" aria-label="chart">
             <Image
+                className="toggle-icon"
                 src="/utorview-forecast/chart-icon.svg"
                 width={20}
                 height={20}

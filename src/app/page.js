@@ -1,6 +1,8 @@
 'use client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './/theme.js';
 
 import TimeFetch from './components/TimeFetch.js';
 
@@ -87,11 +89,44 @@ export default function App() {
   }
 
   return (
+    <ThemeProvider theme={theme}>
     <QueryClientProvider client={queryClient}>
       <main>
-
+        <div id="icons">
+          <a href="https://ncar.ucar.edu/who-we-are/funding" target="_blank">
+            <img
+                id="nsf-icon"
+                src="/utorview-forecast/nsf-icon.png"
+                alt="NSF icon" 
+            />
+          </a>
+          <a href="https://ncar.ucar.edu/</div>" target="_blank">
+            <img
+                id="ncar-icon"
+                src="/utorview-forecast/ncar-icon.svg"
+                alt="NCAR icon" 
+            />
+          </a>
+          <a href="https://ncar.github.io/miles/" target="_blank">
+            <img
+                id="miles-icon"
+                src="/utorview-forecast/miles-icon.png"
+                alt="MILES icon" 
+            />
+          </a>
+        </div>
+        
         <div className="header-container">
           <h1>WoFS UNet Tornado Guidance Viewer</h1>
+        </div>
+
+        <div id="info-container">
+          <img
+                id="info-icon"
+                src="/utorview-forecast/info.svg"
+                alt="More information icon" 
+                width="60"
+            />
         </div>
 
         <TimeFetch onDatesFetch={ handleDatesFetch } />
@@ -128,6 +163,7 @@ export default function App() {
         }
       </main>
     </QueryClientProvider>
+    </ThemeProvider>
   )
 }
 
