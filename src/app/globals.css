@@ -118,6 +118,19 @@ h1 {
     .MuiSlider-markLabel {
         font-size: 0.35em;
     }
+
+    :nth-child(odd of span.MuiSlider-markLabel) {
+        display: none;
+    }
+
+    h1 {
+        font-size: 1.25em;
+    }
+
+    #controls-top {
+        flex-wrap: wrap;
+        gap: 0.85em;
+    }
 }
 
 @media (max-width: 800px) {

@@ -120,14 +120,14 @@ export default function App() {
           <h1>WoFS UNet Tornado Guidance Viewer</h1>
         </div>
 
-        <div id="info-container">
+        {/* <div id="info-container">
           <img
                 id="info-icon"
                 src="/utorview-forecast/info.svg"
                 alt="More information icon" 
                 width="60"
             />
-        </div>
+        </div> */}
 
         <TimeFetch onDatesFetch={ handleDatesFetch } />
 
